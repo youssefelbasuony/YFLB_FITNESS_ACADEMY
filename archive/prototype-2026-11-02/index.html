@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7f3">
+  <meta name="description" content="نموذج تفاعلي لأكاديمية YFLB للياقة البدنية.">
+  <title>YFLB | أكاديمية اللياقة البدنية</title>
+  <link rel="icon" href="assets/logos/yflb-black.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="data/catalog.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="skip">انتقل إلى المحتوى</a>
+  <header class="site-header">
+    <a class="brand" href="#home" data-action="home" aria-label="YFLB Fitness Academy — الرئيسية">
+      <img class="brand-mark" src="assets/logos/yflb-black.svg" data-logo-light="assets/logos/yflb-black.svg" data-logo-dark="assets/logos/yflb-white.svg" alt="YFLB">
+      <span class="brand-caption">FITNESS ACADEMY</span>
+    </a>
+    <nav class="main-nav" aria-label="التنقل الرئيسي" id="mainNav"></nav>
+    <div class="header-actions">
+      <button class="icon-button language-toggle" id="languageToggle" type="button" aria-label="Switch language">EN</button>
+      <button class="icon-button" id="themeToggle" type="button" aria-label="تغيير المظهر"><span id="themeGlyph" aria-hidden="true">☾</span></button>
+      <button class="account-button" id="accountButton" type="button"><span class="account-avatar" aria-hidden="true">●</span><span id="accountLabel">حسابي</span></button>
+    </div>
+  </header>
+  <main id="main" class="main-content" tabindex="-1">
+    <div class="breadcrumb"><span>YFLB</span><b>/</b><strong id="breadcrumbCurrent">الرئيسية</strong></div>
+    <div id="app" aria-live="polite"></div>
+  </main>
+  <nav class="mobile-nav" id="mobileNav" aria-label="التنقل على الهاتف"></nav>
+  <footer class="site-footer" id="siteFooter"></footer>
+  <div class="modal-root" id="modalRoot"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
