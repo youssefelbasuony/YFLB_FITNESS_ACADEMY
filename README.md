@@ -12,7 +12,7 @@ A beginner-first gym companion for learning equipment setup, movement technique,
 
 ## Local development
 
-Requirements: Node.js 24+ and npm. From this application folder:
+Requirements: Node.js 24.x and npm. From this application folder:
 
 ```powershell
 npm ci

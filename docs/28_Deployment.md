@@ -8,6 +8,7 @@
 - The `yflb-training-videos` public-read 50 MiB bucket exists and is empty; there were no local video files to transfer.
 - No deployment, custom domain, or GitHub remote is connected yet. The app folder has a local Git repository and commit.
 - Vercel team authorization is still needed to inspect environment-variable names, finish Preview configuration, and create a Preview deployment. No Production deployment has been made.
+- The current Supabase plan does not support database branching. Keep CRUD and upload smoke tests off the imported database until an isolated test database is available.
 
 ## Required environment
 

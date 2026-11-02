@@ -25,7 +25,7 @@ The setup script seeds a translated two-day full-body beginner template with an 
 
 ## Run requirements
 
-- Node.js 24 or newer and npm.
+- Node.js 24.x and npm.
 - From the app folder, run `npm ci` and `npm run dev`.
 - `npm run dev` does not run database setup. A brand-new local database may be initialized deliberately with `npm run db:setup`; this SQLite-only command seeds the translated catalog and starter plan.
 - Open http://127.0.0.1:3000.
@@ -37,6 +37,7 @@ The setup script seeds a translated two-day full-body beginner template with an 
 - Supabase has the 19-table YFLB schema, RLS enabled on every public table, the 50 MiB public-read media bucket, and foreign-key indexes. No video metadata or media files existed to transfer. Database and Storage runtime flows still need Preview testing.
 - The Vercel project is set to Node.js 24.x, but it has no deployment or connected GitHub repository yet. Access to the Vercel team is awaiting its one-time authorization request.
 - The app folder now has a local Git repository and deployment-preparation commit. No GitHub repository was created and nothing was pushed.
+- The current Supabase plan does not support database branching, so Preview CRUD/media checks need a separate test database to avoid writing test records into the imported dataset.
 - Authentication, admin access, deployment environment variables, and Preview have not been verified. Do not use the hosted database as an application until Vercel secrets and the owner email are configured.
 - Email verification, password recovery, account deletion, rate limiting, backups, and monitoring need production setup.
 - Plan templates are general learning examples for healthy adults, not individualized medical advice. Have a qualified coach review movement guidance before public use.

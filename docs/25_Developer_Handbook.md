@@ -2,7 +2,7 @@
 
 ## Run locally
 
-Use Node.js 24 or newer and npm. From this directory:
+Use Node.js 24.x and npm. From this directory:
 
 ```powershell
 npm install

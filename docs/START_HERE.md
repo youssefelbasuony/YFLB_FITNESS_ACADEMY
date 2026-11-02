@@ -10,7 +10,7 @@ Next.js App Router and React power the web app. Node.js Route Handlers provide t
 
 ## Run locally
 
-1. Install Node.js 24 or newer and npm; Vercel is configured for Node.js 24.x.
+1. Install Node.js 24.x and npm; Vercel is configured for Node.js 24.x.
 2. From this application folder, run `npm ci` and `npm run dev`.
 3. Starting the app does not create secrets, run migrations, or seed data. For a brand-new local database only, create `.env.local` from `.env.example` and explicitly run `npm run db:setup`.
 4. Open http://127.0.0.1:3000.
