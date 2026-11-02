@@ -23,7 +23,12 @@ class AsyncMutex {
 function configuredProvider(): DatabaseProvider {
   const explicit = process.env.DATABASE_PROVIDER?.trim().toLowerCase();
   if (explicit === "postgres" || explicit === "postgresql") return "postgres";
-  if (explicit === "sqlite") return "sqlite";
+  if (explicit === "sqlite") {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("Production requires PostgreSQL; SQLite is disabled for production deployments.");
+    }
+    return "sqlite";
+  }
   if (explicit) throw new Error("DATABASE_PROVIDER must be sqlite or postgres.");
   if (process.env.POSTGRES_PRISMA_URL || process.env.POSTGRES_URL || process.env.DATABASE_URL) return "postgres";
   if (process.env.NODE_ENV === "production") throw new Error("Production requires POSTGRES_URL; refusing to open a local SQLite database.");

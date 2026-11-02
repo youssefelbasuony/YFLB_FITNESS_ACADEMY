@@ -5,7 +5,8 @@ Never commit `.env`, `.env.local`, Vercel environment exports, or secret values.
 | Variable | Local | Vercel Preview/Production | Purpose |
 | --- | --- | --- | --- |
 | `BETTER_AUTH_SECRET` | Required | Required | Signs Better Auth cookies/tokens; stable secret at least 32 characters. |
-| `BETTER_AUTH_URL` | `http://127.0.0.1:3000` | Exact deployment origin | Better Auth base URL and trusted origin. |
+| `BETTER_AUTH_URL` | `http://127.0.0.1:3000` | Exact origin when set; use the stable app origin in Production | Explicit Better Auth base URL and trusted origin. If omitted on Vercel, the app uses that deployment's `VERCEL_URL` as the exact Preview origin. |
+| `VERCEL_URL` | Not set | Supplied by Vercel | System deployment hostname; Preview fallback for Better Auth. Do not add it manually. |
 | `DATABASE_PROVIDER` | `sqlite` | `postgres` | Explicit provider; app also detects a Postgres URL. |
 | `DATABASE_PATH` | `data/yflb.sqlite` | Not used | Optional local SQLite path. |
 | `POSTGRES_PRISMA_URL` | Optional | Required for runtime | Supabase pooler URL used by serverless app requests. |

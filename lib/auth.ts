@@ -1,7 +1,10 @@
 import { betterAuth } from "better-auth";
 import { authDatabase } from "./db";
 
-const baseURL = process.env.BETTER_AUTH_URL || "http://127.0.0.1:3000";
+const deploymentURL = process.env.VERCEL_URL?.trim()
+  ? `https://${process.env.VERCEL_URL.trim()}`
+  : undefined;
+const baseURL = process.env.BETTER_AUTH_URL?.trim() || deploymentURL || "http://127.0.0.1:3000";
 export const auth = betterAuth({
   appName: "YFLB Fitness Academy",
   database: authDatabase,
