@@ -36,6 +36,9 @@ const appTables = [
 ];
 const knownTables = new Set([...appTables, "user", "account", "session", "verification", "jwks"]);
 const pool = postgresPool;
+const appSchema = fs.readFileSync(path.join(process.cwd(), "db", "schema.postgres.sql"), "utf8");
+const storageSchema = fs.readFileSync(path.join(process.cwd(), "db", "storage.supabase.sql"), "utf8");
+const indexMigration = fs.readFileSync(path.join(process.cwd(), "db", "migrations", "002_foreign_key_indexes.sql"), "utf8");
 
 const existing = await pool.query<{ table_name: string }>(
   "SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE' ORDER BY table_name",
@@ -53,7 +56,18 @@ if (existing.rows.some((row) => row.table_name === "yflb_migration_runs")) {
     if (missing.length || bucket.rows[0]?.public !== true || Number(bucket.rows[0]?.file_size_limit) !== 52428800) {
       throw new Error(`The recorded YFLB schema is incomplete. Missing tables: ${missing.join(", ") || "none"}; inspect the storage bucket before retrying.`);
     }
-    console.log("The YFLB PostgreSQL schema migration is already recorded; no database changes were made.");
+    const migrationClient = await pool.connect();
+    try {
+      await migrationClient.query("BEGIN");
+      await migrationClient.query(indexMigration);
+      await migrationClient.query("COMMIT");
+    } catch (error) {
+      await migrationClient.query("ROLLBACK").catch(() => undefined);
+      throw error;
+    } finally {
+      migrationClient.release();
+    }
+    console.log("The YFLB PostgreSQL schema is present; safe foreign-key indexes were reconciled.");
     await pool.end();
     process.exit(0);
   }
@@ -66,12 +80,11 @@ for (const { table_name: table } of existing.rows) {
 const authMigrations = await getMigrations(auth.options);
 await authMigrations.runMigrations();
 
-const appSchema = fs.readFileSync(path.join(process.cwd(), "db", "schema.postgres.sql"), "utf8");
-const storageSchema = fs.readFileSync(path.join(process.cwd(), "db", "storage.supabase.sql"), "utf8");
 const client = await pool.connect();
 try {
   await client.query("BEGIN");
   await client.query(appSchema);
+  await client.query(indexMigration);
   await client.query(storageSchema);
   const bucket = await client.query<{ public: boolean; file_size_limit: number; allowed_mime_types: string[] }>(
     "SELECT public,file_size_limit,allowed_mime_types FROM storage.buckets WHERE id='yflb-training-videos'",

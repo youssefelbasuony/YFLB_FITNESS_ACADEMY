@@ -10,7 +10,7 @@
 - SHA-256: `60C23DB55DF5E345353D7429515C8C6591138F5B1982EB389293A7AF575D0705`.
 - The source DB was not replaced, reset, or migrated. The snapshot is outside the app repository and Git workspace.
 
-The app was stopped and no writer was detected before backup. The original main DB and WAL sizes/times remained unchanged. A read-only SQLite inspection refreshed the existing SHM file timestamp; this was recorded and did not alter database rows. Do not upload the source, WAL/SHM, backup, or ZIP archives.
+The app was stopped and no writer was detected before backup. The original main DB and WAL sizes/times remained unchanged. A read-only SQLite inspection refreshed the existing SHM file timestamp; this was recorded and did not alter database rows. The exact verified backup was imported to the connected Supabase project on 2026-11-02; the SQLite source and this backup were not changed. Do not upload the source, WAL/SHM, backup, or ZIP archives.
 
 ## Preserved row counts
 
@@ -36,6 +36,10 @@ The app was stopped and no writer was detected before backup. The original main 
 | `member_training_sessions` | 0 |
 
 The SQLite backup also passed a read-only dry-run of the migration importer with the same SHA-256 and counts. No video-upload rows or video files were present during inspection.
+
+## Supabase import verification
+
+The backup SHA-256 above was recorded in `public.yflb_migration_runs` as the import source. All 18 source table counts matched after import. The existing user and account IDs and a one-way fingerprint of the existing password hash matched the backup; checked user, machine, muscle, and workout foreign-key relationships had zero orphans. The original SQLite database remains the recovery source until Preview sign-in and data persistence have been tested.
 
 ## Future backup procedure
 

@@ -29,7 +29,7 @@ Open `/admin`, sign in, and use the owner email configured as `ADMIN_EMAIL` plus
 
 ## Production data and deployment
 
-The Vercel project is configured for Node.js 24. Its Supabase integration provides Postgres connection variables, and the app chooses PostgreSQL when a Postgres URL is present. The actual Supabase schema and SQLite data import are separate, explicit commands; a Vercel build never creates tables, seeds content, or changes data.
+The Vercel project is configured for Node.js 24. Its Supabase integration provides Postgres connection variables, and the app chooses PostgreSQL when a Postgres URL is present. The Supabase schema and verified SQLite backup have been applied to the connected database; the local SQLite source remains unchanged. Vercel environment access and Preview deployment still need to be completed before the hosted app can be tested. A Vercel build never creates tables, seeds content, or changes data.
 
 Before connecting the app to production, read:
 

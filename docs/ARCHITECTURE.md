@@ -15,7 +15,7 @@ The application modules in `app/api/` read and write through `db.all`, `db.get`,
 - `video_uploads` stores file metadata and object paths; Supabase Storage stores the media bytes.
 - `app_settings`, `disabled_seed_machines`, and `yflb_content_migrations` preserve local admin/content setup state.
 
-The full application PostgreSQL definition is [db/schema.postgres.sql](../db/schema.postgres.sql). Better Auth creates its own tables from the pinned Better Auth configuration when `npm run db:migrate -- --apply` is deliberately run.
+The full application PostgreSQL definition is [db/schema.postgres.sql](../db/schema.postgres.sql). Better Auth creates its own tables from the pinned Better Auth configuration when `npm run db:migrate -- --apply` is deliberately run. The connected Supabase database now contains the schema and imported backup; see [SUPABASE_MIGRATION.md](SUPABASE_MIGRATION.md) for verification.
 
 ## Media flow
 
@@ -25,4 +25,4 @@ An owner requests a one-use signed upload URL from `/api/admin/videos`. The serv
 
 `npm run build` only runs `next build`. Local schema setup/seeding (`npm run db:setup`), Postgres schema creation (`npm run db:migrate -- --apply`), and SQLite data import (`npm run db:import-sqlite -- --source <verified-backup> --apply`) are separate operations. No build, install, or start hook performs a migration.
 
-The existing project currently has no successful deployment. The schema and data commands are prepared and guarded, but remote migration, import, preview, and end-to-end production behavior remain unverified until Vercel access and environment configuration are available.
+The project currently has no successful deployment. Supabase schema and data migration are verified, but Vercel environment access, Preview deployment, and end-to-end runtime behavior remain unverified. Production has not been deployed.

@@ -2,7 +2,7 @@
 
 ## Before starting
 
-The verified source backup is described in [BACKUP_AND_RESTORE.md](BACKUP_AND_RESTORE.md). It must remain available outside Git. The current Supabase project was inspected and its `public` schema and Storage bucket list were empty at inspection time. Recheck them before applying migrations; never run reset, drop, truncate, or seed commands against the hosted project.
+The verified source backup is described in [BACKUP_AND_RESTORE.md](BACKUP_AND_RESTORE.md). It must remain available outside Git. Before the first migration, the Supabase project's `public` schema and Storage bucket list were empty. The YFLB schema and data have since been applied; do not rerun the import against a populated target or use reset, drop, truncate, or seed commands against the hosted project.
 
 ## Connection settings
 
@@ -31,7 +31,7 @@ Do not copy a service-role/secret key to a `NEXT_PUBLIC_` variable. The app does
 4. The runner first rejects unknown tables or existing rows, then uses Better Auth's migration API, applies `db/schema.postgres.sql`, configures a public-read 50 MiB `yflb-training-videos` bucket, enables RLS, revokes Data API table/sequence access, and records a migration marker. It is not called by build/start.
 5. Inspect public tables, RLS, bucket settings, and Supabase security advisors. Stop if any preflight check differs from expectations.
 
-The migration is additive and refuses to overwrite an existing bucket with mismatched settings. It does not reset existing tables. A partially completed auth migration can be retried while all affected tables remain empty.
+The migration is additive and refuses to overwrite an existing bucket with mismatched settings. It does not reset existing tables. A partially completed auth migration can be retried while all affected tables remain empty. The runner also reconciles the additive indexes in `db/migrations/002_foreign_key_indexes.sql` when the schema marker already exists.
 
 ## Import the verified SQLite backup
 
@@ -50,6 +50,18 @@ npm run db:import-sqlite -- --source "D:\YFLB_Fitness_Academy_Backups\YFLB-Fitne
 The importer preserves IDs, Better Auth hashes, foreign-key order, and workout exercise identity values. It runs in one transaction, refuses any preexisting destination rows, compares per-table row counts, and records the source checksum. A rerun with the same checksum only verifies counts; a different source is rejected. The SQLite source and backup are never modified.
 
 Current backup counts are listed in [BACKUP_AND_RESTORE.md](BACKUP_AND_RESTORE.md). There are no video-upload metadata rows or local video files to copy at this time. Do not claim that media was imported.
+
+## Applied to the connected Supabase project — 2026-11-02
+
+- Project reference: `lazzfdxdadvwcimzrylk` (`us-east-1`, PostgreSQL 17.11).
+- Applied migration history: `yflb_postgres_schema` and `yflb_foreign_key_indexes`.
+- Created 19 public tables, including Better Auth's four tables and the YFLB application tables. All have RLS enabled; direct `anon`/`authenticated` table and sequence grants are revoked. The app uses a server-side PostgreSQL connection.
+- Created the `yflb-training-videos` bucket as public-read, 50 MiB maximum, with the app's accepted video/image MIME types. It contains no files.
+- Imported the exact SQLite backup with an atomic transaction and source-checksum marker. Table counts match [BACKUP_AND_RESTORE.md](BACKUP_AND_RESTORE.md); user/account IDs and the existing password hash were verified, and checked foreign-key relationships have no orphans.
+- The original SQLite database and external backup remain unchanged. There were no video-upload rows or local video files to move.
+- The initial schema and backup import were applied through the authenticated Supabase management connection after verifying the target was empty. Local `.env.local` has no Postgres URL, so it was not used to connect. The import ran as one transaction with an empty-target guard, row-count assertions, identity sequence reset, and source SHA-256 marker. Do not repeat it against this populated target.
+- Security advisor reports `RLS enabled, no policy` at INFO for the server-only public tables. This is intentional: RLS denies access by default and Data API grants are revoked. Performance advisor's foreign-key-index warning was resolved; unused-index INFO findings are expected before app traffic.
+- Preview deployment, live sign-in, admin access, and browser-to-Storage upload/download have not yet been tested.
 
 ## After import
 

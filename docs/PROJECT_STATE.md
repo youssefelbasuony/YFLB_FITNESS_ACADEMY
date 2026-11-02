@@ -33,9 +33,11 @@ The setup script seeds a translated two-day full-body beginner template with an 
 ## Limits before public launch
 
 - A tested SQLite Backup API backup exists outside Git. See `docs/BACKUP_AND_RESTORE.md`.
-- PostgreSQL and Supabase Storage adapters, schemas, and guarded migration scripts are prepared. The actual Supabase schema/data import are not applied or verified yet.
-- The Vercel project is set to Node.js 24.x, but it has no deployment or connected GitHub repository yet.
-- GitHub/Vercel team access is currently blocked by authorization; no secrets or source data were uploaded.
+- The verified SQLite backup was imported to Supabase PostgreSQL on 2026-11-02. All source table counts matched, the existing user/account IDs and password hash were preserved, and foreign-key orphan checks returned zero. The original SQLite database and backup remain unchanged.
+- Supabase has the 19-table YFLB schema, RLS enabled on every public table, the 50 MiB public-read media bucket, and foreign-key indexes. No video metadata or media files existed to transfer. Database and Storage runtime flows still need Preview testing.
+- The Vercel project is set to Node.js 24.x, but it has no deployment or connected GitHub repository yet. Access to the Vercel team is awaiting its one-time authorization request.
+- The app folder now has a local Git repository and deployment-preparation commit. No GitHub repository was created and nothing was pushed.
+- Authentication, admin access, deployment environment variables, and Preview have not been verified. Do not use the hosted database as an application until Vercel secrets and the owner email are configured.
 - Email verification, password recovery, account deletion, rate limiting, backups, and monitoring need production setup.
 - Plan templates are general learning examples for healthy adults, not individualized medical advice. Have a qualified coach review movement guidance before public use.
 - Set ADMIN_EMAIL and protect ADMIN_ACCESS_KEY; see ADMIN_GUIDE.md.
